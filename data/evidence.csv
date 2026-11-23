@@ -1,0 +1,71 @@
+topic_id,department,ticket_excerpt
+KB-001,Business Technology,My new monitor won't wake up when docked. I've tried two cables.
+KB-001,Business Technology,Need a second charger and a keyboard for my home office.
+KB-002,Business Technology,Locked out after changing phones; the authenticator app shows no codes.
+KB-002,Business Technology,Password expired while I was on leave and the reset link fails.
+KB-003,Business Technology,VPN disconnects every few minutes when I'm working from home.
+KB-003,Business Technology,Can't reach the shared drive unless I'm in the office.
+KB-004,Business Technology,How do I request a license for the diagramming tool?
+KB-004,Business Technology,My analytics license expired and I need it for month-end.
+KB-005,Business Technology,Room 4B screen won't share from my laptop.
+KB-005,Business Technology,Echo in every call from the large conference room.
+KB-006,Business Technology,Badge-release printer on floor 3 says offline.
+KB-006,Business Technology,Scan-to-email sends a blank attachment.
+KB-007,Business Technology,I moved teams and can't see my new team's queue in the case system.
+KB-007,Business Technology,Need read access to the finance reporting app.
+KB-008,Business Technology,Work email stopped syncing on my phone after the update.
+KB-008,Business Technology,How do I enroll a new phone for company apps?
+KB-009,Finance,My receipt upload keeps failing even though the file is a PDF.
+KB-009,Finance,Expense report was returned with no reason given.
+KB-010,Finance,Can I book a hotel above the city rate if the event venue is full?
+KB-010,Finance,Is a rideshare to the airport reimbursable?
+KB-011,Finance,What is the meal per diem for a two-day trip to Chicago?
+KB-011,Finance,Do I claim per diem if I stay with friends?
+KB-012,Finance,There's a charge on my corporate card I don't recognize.
+KB-012,Finance,My card was declined at a vendor we use every month.
+KB-013,Finance,A vendor says our payment is 30 days late. Where is it in the process?
+KB-013,Finance,Invoice was entered twice; how do I stop the duplicate?
+KB-014,Finance,"What approvals do I need for a $4,000 software purchase?"
+KB-014,Finance,Purchase request is stuck with an approver who left.
+KB-015,People,My enrollment shows pending and the deadline is Friday.
+KB-015,People,How do I add a dependent mid-year?
+KB-016,People,My last pay statement is missing overtime hours.
+KB-016,People,Where do I update my tax withholding?
+KB-017,People,How much parental leave am I eligible for?
+KB-017,People,Can I carry over unused vacation into next year?
+KB-018,People,What do I need to finish in my first week?
+KB-018,People,My manager hasn't received my onboarding tasks.
+KB-019,People,When does self-assessment close this cycle?
+KB-019,People,How do I request feedback from a peer outside my team?
+KB-020,People,Mandatory training shows incomplete even though I finished it.
+KB-020,People,How do I enroll in the leadership course?
+KB-021,Legal,Which form do I use to request a new client contract?
+KB-021,Legal,How long does legal review take for a renewal?
+KB-022,Legal,Where is the mutual NDA template?
+KB-022,Legal,Can I sign an NDA on the vendor's paper?
+KB-023,Legal,A customer asked us to delete their data. What's the process?
+KB-023,Legal,Do we have a data processing agreement with this vendor?
+KB-024,Legal,I received a legal hold notice. What can't I delete?
+KB-024,Legal,Does a legal hold apply to my chat messages?
+KB-025,Legal,Who can sign a contract over $250K?
+KB-025,Legal,Can my director sign this order form?
+KB-026,Facilities,The desk booking map shows my floor as closed.
+KB-026,Facilities,How do I book a room for a 30-person session?
+KB-027,Facilities,My badge stopped working at the garage entrance.
+KB-027,Facilities,Visitor badges for a client meeting tomorrow?
+KB-028,Facilities,How do I get a parking permit?
+KB-028,Facilities,Is there a transit benefit?
+KB-029,Facilities,How do I ship equipment back to the office?
+KB-029,Facilities,Where do packages for remote staff get logged?
+KB-030,Sales Operations,I can't edit an opportunity my team owns.
+KB-030,Sales Operations,Need access to the partner accounts view.
+KB-031,Sales Operations,Quote won't generate the order form; status is Customer Ready.
+KB-031,Sales Operations,Discount approval isn't routing to my manager.
+KB-032,Sales Operations,My commission statement doesn't include a deal that closed last month.
+KB-032,Sales Operations,How are split deals credited?
+KB-033,Security,I clicked a link in a suspicious email. What now?
+KB-033,Security,Got an email from the CEO asking for gift cards.
+KB-034,Security,Is customer usage data confidential or internal?
+KB-034,Security,Can I share this spreadsheet with a contractor?
+KB-035,Security,My security training is overdue but the link doesn't load.
+KB-035,Security,How often is security training required?

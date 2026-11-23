@@ -1,0 +1,36 @@
+topic_id,department,category,topic,risk_tier,curator,status,live_since,tickets_90d,avg_handle_min,deflection_rate,controls_required,controls_complete
+KB-001,Business Technology,Hardware,Laptop and peripheral setup,3,Curator D,Live,2026-06-28,310,25,0.45,1,1
+KB-002,Business Technology,Access,Password reset and MFA,2,Curator E,Live,2026-06-06,420,12,0.3,3,3
+KB-003,Business Technology,Network,VPN and remote access,2,Curator D,Live,2026-06-06,205,30,0.3,3,3
+KB-004,Business Technology,Software,Software requests and licensing,3,Curator F,Live,2026-06-25,260,18,0.45,1,1
+KB-005,Business Technology,Collaboration,Video conferencing rooms,3,Curator D,Live,2026-06-12,140,15,0.45,1,1
+KB-006,Business Technology,Hardware,Printing and scanning,3,Curator A,Live,2026-06-05,95,10,0.45,1,1
+KB-007,Business Technology,Access,Internal application access,2,Curator B,Live,2026-06-02,230,20,0.3,3,3
+KB-008,Business Technology,Mobile,Mobile device enrollment,2,Curator E,Live,2026-06-10,80,22,0.3,3,3
+KB-009,Finance,Expenses,Expense reports and receipts,2,,Not started,,240,16,0.3,3,0
+KB-010,Finance,Travel,Corporate travel policy,3,,Not started,,150,12,0.45,1,0
+KB-011,Finance,Travel,Per diem rules,3,,Not started,,90,10,0.45,1,0
+KB-012,Finance,Cards,Corporate card disputes,1,Curator A,In review,,70,35,0.15,4,3
+KB-013,Finance,Payables,Vendor invoices and payments,2,,Not started,,120,28,0.3,3,0
+KB-014,Finance,Procurement,Purchase requests,3,Curator A,In review,,110,14,0.45,1,0
+KB-015,People,Benefits,Benefits enrollment,1,,Not started,,180,30,0.15,4,0
+KB-016,People,Payroll,Payroll and pay statements,1,Curator A,Drafting,,160,25,0.15,4,2
+KB-017,People,Leave,Leave and time-off policies,1,,Not started,,130,20,0.15,4,0
+KB-018,People,Onboarding,New hire onboarding checklist,3,Curator A,In review,,115,15,0.45,1,0
+KB-019,People,Performance,Performance review cycle,3,Curator D,In review,,85,12,0.45,1,0
+KB-020,People,Learning,Learning platform,3,Curator B,In review,,60,8,0.45,1,0
+KB-021,Legal,Contracts,Contract request intake,2,,Not started,,140,30,0.3,3,0
+KB-022,Legal,Contracts,NDA templates,2,Curator D,Drafting,,105,10,0.3,3,1
+KB-023,Legal,Privacy,Data privacy requests,1,,Not started,,55,45,0.15,4,0
+KB-024,Legal,Compliance,Legal hold,1,Curator A,Not started,,25,40,0.15,4,0
+KB-025,Legal,Contracts,Signature authority,2,,Not started,,45,15,0.3,3,0
+KB-026,Facilities,Workplace,Desk and room booking,3,Curator F,Live,2026-07-07,95,8,0.45,1,1
+KB-027,Facilities,Access,Office badges and building access,2,,Drafting,,75,15,0.3,3,1
+KB-028,Facilities,Workplace,Parking and commuting,3,Curator A,Live,2026-08-11,50,8,0.45,1,1
+KB-029,Facilities,Workplace,Mail and shipping,3,Curator C,Live,2026-07-28,40,10,0.45,1,1
+KB-030,Sales Operations,CRM,CRM opportunity access,2,,Not started,,190,18,0.3,3,0
+KB-031,Sales Operations,Quoting,Quote generation,2,Curator E,Live,2026-07-25,165,22,0.3,3,3
+KB-032,Sales Operations,Compensation,Commission questions,1,Curator B,In review,,85,30,0.15,4,3
+KB-033,Security,Threats,Phishing reporting,2,Curator C,Live,2026-07-07,120,10,0.3,3,3
+KB-034,Security,Data,Data classification,2,Curator F,Live,2026-06-13,60,15,0.3,3,3
+KB-035,Security,Training,Security awareness training,3,Curator D,Live,2026-06-23,45,6,0.45,1,1

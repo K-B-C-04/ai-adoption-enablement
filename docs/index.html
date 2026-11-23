@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Adoption &amp; Enablement</title>
+<meta name="description" content="Interactive demo: adoption, knowledge-base enablement and governance for an internal AI assistant at Wazobia Corp, a fictional company, on synthetic data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#fff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
+  --accent:#4338ca; --accent-soft:#eef2ff; --alert:#dc2626; --alert-soft:#fef2f2;
+  --ok:#16a34a; --ok-soft:#f0fdf4; --warn:#b45309; --warn-soft:#fffbeb; --calm:#cbd5e1;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 48px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:40px;height:40px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+h1{font-size:20px;margin:0}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.banner{background:var(--warn-soft);border:1px solid #fde68a;color:#78350f;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:16px}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:18px}
+nav.tabs button{flex:1 1 auto;border:0;background:none;padding:10px 14px;border-radius:8px;font:600 13px Inter,sans-serif;color:var(--muted);cursor:pointer;min-height:44px}
+nav.tabs button[aria-selected="true"]{background:var(--accent);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr))}
+.three{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.kpi .label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi .value{font:600 28px/1.2 var(--mono);margin-top:6px}
+.kpi .note{font-size:12px;color:var(--muted)}
+.kpi.alert .value{color:var(--alert)} .kpi.warn .value{color:var(--warn)} .kpi.ok .value{color:var(--ok)}
+h2{font-size:15px;margin:0 0 2px}
+.card .desc{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+.chart{position:relative;height:260px}
+.chart.sm{height:220px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:14px}
+.filters label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+select,input,textarea{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;color:var(--ink);min-height:40px}
+.table-box{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td .sub{font-size:11.5px;color:var(--muted)}
+.wrap-cell{white-space:normal;min-width:260px}
+.strong{font-weight:600}
+.pill{display:inline-block;white-space:nowrap;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-pend{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--alert-soft);color:var(--alert)} .p-info{background:var(--accent-soft);color:var(--accent)}
+.p-mute{background:#f3f4f6;color:var(--muted)} .p-draft{background:#eff6ff;color:#1d4ed8}
+.btn{border:0;background:var(--accent);color:#fff;font:600 13px Inter,sans-serif;padding:10px 14px;border-radius:8px;cursor:pointer;min-height:44px}
+.btn.ghost{background:#fff;color:var(--accent);border:1px solid var(--line)}
+.linkbtn{border:0;background:none;color:var(--accent);font:600 12px Inter,sans-serif;cursor:pointer;padding:4px 0}
+.decisions{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.decision{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.decision .tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.decision h3{font-size:14px;margin:4px 0 6px}
+.decision p{margin:0;font-size:13px;color:#374151}
+.decision .act{margin-top:8px;font-size:12.5px}
+.rows{display:grid;gap:10px}
+.row{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer;text-align:left;font:inherit;width:100%}
+.row[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.row .top{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.row .meta{font-size:11.5px;color:var(--muted)}
+.stack{display:flex;height:8px;border-radius:4px;overflow:hidden;background:#eef0f4;margin:6px 0 4px}
+.stack span{display:block;height:100%}
+.card-head{display:flex;justify-content:space-between;align-items:start;gap:8px}
+.more{text-align:center;margin-top:12px}
+dialog{border:0;border-radius:14px;padding:0;max-width:540px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog form{padding:20px;display:grid;gap:10px;grid-template-columns:1fr 1fr}
+dialog h2{grid-column:1/-1}
+dialog .full{grid-column:1/-1}
+dialog label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+dialog .actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px}
+.form-note{grid-column:1/-1;margin:-4px 0 0;font-size:12px;color:var(--muted)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+[hidden]{display:none!important}
+footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
+@media (max-width:640px){dialog form{grid-template-columns:1fr}.kpi .value{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">WZ</div>
+      <div>
+        <h1>AI Adoption &amp; Enablement</h1>
+        <p class="sub">Wazobia Corp · Ask Wazobia internal assistant · Data as of <span id="asof"></span></p>
+      </div>
+    </div>
+    <a class="btn ghost" href="https://github.com/K-B-C-04/ai-adoption-enablement" style="text-decoration:none;display:inline-flex;align-items:center">View on GitHub</a>
+  </header>
+  <div class="banner"><strong>Demo:</strong> Wazobia Corp is a fictional company. Every person, topic, ticket and figure is synthetic.</div>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" aria-selected="true" data-tab="overview">Executive summary</button>
+    <button role="tab" aria-selected="false" data-tab="adoption">Adoption</button>
+    <button role="tab" aria-selected="false" data-tab="governance">Enablement &amp; governance</button>
+    <button role="tab" aria-selected="false" data-tab="evidence">Ticket evidence</button>
+  </nav>
+
+  <!-- ===================== EXECUTIVE SUMMARY ===================== -->
+  <section id="overview" role="tabpanel">
+    <div class="grid kpis" id="ov-kpis"></div>
+    <h2 style="margin:22px 0 10px;font-size:16px">Decisions this supports</h2>
+    <div class="decisions" id="ov-decisions"></div>
+    <div class="grid two" style="margin-top:14px">
+      <div class="card"><h2>Weekly active users by department</h2><p class="desc">Share of each department's headcount using the assistant each week since launch.</p><div class="chart"><canvas id="ov-adoption"></canvas></div></div>
+      <div class="card"><h2>Support hours per quarter</h2><p class="desc">Hours already recovered by live topics, and hours still available in the backlog.</p><div class="chart"><canvas id="ov-value"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== ADOPTION ===================== -->
+  <section id="adoption" role="tabpanel" hidden>
+    <div class="filters">
+      <label>Department<select id="ad-dept"></select></label>
+    </div>
+    <div class="grid kpis" id="ad-kpis"></div>
+    <div class="grid two" style="margin-top:14px">
+      <div class="card"><h2>Weekly active users</h2><p class="desc">Share of headcount using the assistant each week.</p><div class="chart"><canvas id="ad-active"></canvas></div></div>
+      <div class="card"><h2>Questions: resolved vs escalated</h2><p class="desc">Questions answered by the assistant, and those that became support tickets.</p><div class="chart"><canvas id="ad-queries"></canvas></div></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2>Department scorecard</h2><p class="desc">Latest week. Adoption tracks how much of each department's content is live.</p>
+      <div class="table-box"><table><thead><tr><th>Department</th><th class="num">Headcount</th><th class="num">Weekly active</th><th class="num">Active rate</th><th class="num">Resolution rate</th><th class="num">Topics live</th></tr></thead><tbody id="ad-rows"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ===================== ENABLEMENT & GOVERNANCE ===================== -->
+  <section id="governance" role="tabpanel" hidden>
+    <div class="grid kpis" id="gv-kpis"></div>
+    <div class="grid three" style="margin-top:14px">
+      <div class="card"><div class="card-head"><div><h2>Enablement status</h2><p class="desc">Knowledge-base topics by stage.</p></div></div><div class="chart sm"><canvas id="gv-status"></canvas></div></div>
+      <div class="card"><div class="card-head"><div><h2>Risk tiers</h2><p class="desc">Topics by compliance and data exposure.</p></div></div><div class="chart sm"><canvas id="gv-tiers"></canvas></div></div>
+      <div class="card"><div class="card-head"><div><h2>Readiness by department</h2><p class="desc">Select a bar to filter the topic list.</p></div></div><div class="chart sm"><canvas id="gv-dept"></canvas></div></div>
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <div class="card"><div class="card-head"><div><h2>Department rollout</h2><p class="desc">Share of each department's topics that are live, and who owns them.</p></div><button class="linkbtn" id="gv-clear-dept" hidden>Clear filter</button></div><div class="rows" id="gv-depts"></div></div>
+      <div class="card"><div class="card-head"><div><h2>Risk tier breakdown</h2><p class="desc">Live topics and open governance controls per tier.</p></div><button class="linkbtn" id="gv-clear-tier" hidden>Clear filter</button></div><div class="rows" id="gv-tierrows"></div></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-head"><div><h2>Topic register</h2><p class="desc" id="gv-count"></p></div><button class="btn" id="gv-add">Add topic</button></div>
+      <div class="filters">
+        <label>Department<select id="gv-f-dept"></select></label>
+        <label>Risk tier<select id="gv-f-tier"><option value="">All</option><option value="1">Tier 1</option><option value="2">Tier 2</option><option value="3">Tier 3</option></select></label>
+        <label>Status<select id="gv-f-status"><option value="">All</option><option>Live</option><option>In review</option><option>Drafting</option><option>Not started</option></select></label>
+        <label>Search<input id="gv-search" type="search" placeholder="Topic or curator"></label>
+      </div>
+      <div class="table-box"><table><thead><tr><th>Topic</th><th>Risk tier</th><th>Curator</th><th>Status</th><th class="num">Controls</th><th class="num">Tickets / qtr</th><th class="num">Hours recoverable / qtr</th></tr></thead><tbody id="gv-rows"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ===================== TICKET EVIDENCE ===================== -->
+  <section id="evidence" role="tabpanel" hidden>
+    <div class="filters">
+      <label>Department<select id="ev-dept"></select></label>
+      <label>Search<input id="ev-search" type="search" placeholder="Words in the ticket or topic"></label>
+    </div>
+    <div class="card">
+      <h2>Support tickets behind each topic</h2><p class="desc" id="ev-count"></p>
+      <div class="table-box"><table><thead><tr><th>Topic</th><th>Department</th><th>Status</th><th>Example ticket</th></tr></thead><tbody id="ev-rows"></tbody></table></div>
+    </div>
+  </section>
+
+  <footer>Wazobia Corp is a fictional company · All data is synthetic · Built by Kamsi Ben Chiobi</footer>
+</div>
+
+<dialog id="dlg"><form method="dialog" id="dlg-form"></form></dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const C = {accent:'#4338ca', cyan:'#0891b2', amber:'#d97706', gray:'#9ca3af', calm:'#cbd5e1', alert:'#dc2626', ok:'#16a34a', draft:'#93c5fd'};
+const STATUS = ['Live', 'In review', 'Drafting', 'Not started'];
+const STATUS_COLOR = {'Live': C.ok, 'In review': C.amber, 'Drafting': C.draft, 'Not started': C.calm};
+const STATUS_PILL = {'Live': 'p-ok', 'In review': 'p-pend', 'Drafting': 'p-draft', 'Not started': 'p-mute'};
+const TIER = {1: 'Tier 1 · Compliance & personal data', 2: 'Tier 2 · Operational & access', 3: 'Tier 3 · General'};
+const TIER_SHORT = {1: 'Tier 1', 2: 'Tier 2', 3: 'Tier 3'};
+const TIER_COLOR = {1: C.alert, 2: C.amber, 3: C.accent};
+const TIER_PILL = {1: 'p-bad', 2: 'p-pend', 3: 'p-info'};
+const DEPT_COLORS = ['#4338ca', '#6366f1', '#0891b2', '#22d3ee', '#d97706', '#f97316', '#dc2626'];
+Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+Chart.defaults.color = '#6b7280';
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const uniq = a => [...new Set(a)].sort();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const charts = {};
+let D, AS_OF, DEPTS, WEEKS;
+
+function chart(id, config) {
+  if (charts[id]) charts[id].destroy();
+  config.options = Object.assign({responsive: true, maintainAspectRatio: false, animation: {duration: 250}}, config.options || {});
+  charts[id] = new Chart($(id), config);
+}
+function kpis(el, items) {
+  $(el).innerHTML = items.map(k => `<div class="card kpi ${k.tone || ''}"><div class="label">${k.label}</div><div class="value">${k.value}</div><div class="note">${k.note || ''}</div></div>`).join('');
+}
+function options(el, values, all) { $(el).innerHTML = `<option value="">${all}</option>` + values.map(v => `<option>${esc(v)}</option>`).join(''); }
+function toast(t) { const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2400); }
+const hours = t => t.tickets_90d * t.deflection_rate * t.avg_handle_min / 60;
+const live = t => t.status === 'Live';
+const latestWeek = () => D.adoption.filter(r => r.week_start === WEEKS[WEEKS.length - 1]);
+const weekLabel = w => new Date(w + 'T12:00').toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+
+/* ---------------- tabs ---------------- */
+document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('nav.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('section[role=tabpanel]').forEach(s => s.hidden = s.id !== b.dataset.tab);
+  ({overview: renderOverview, adoption: renderAdoption, governance: renderGov, evidence: renderEvidence})[b.dataset.tab]();
+}));
+
+/* ---------------- executive summary ---------------- */
+function renderOverview() {
+  const T = D.topics, L = latestWeek();
+  const active = L.reduce((s, r) => s + r.active_users, 0), hc = L.reduce((s, r) => s + r.headcount, 0);
+  const q = L.reduce((s, r) => s + r.queries, 0), res = L.reduce((s, r) => s + r.resolved_by_assistant, 0);
+  const liveT = T.filter(live), tier1 = T.filter(t => t.risk_tier === 1);
+  const covered = pct(liveT.reduce((s, t) => s + t.tickets_90d, 0), T.reduce((s, t) => s + t.tickets_90d, 0));
+  const unowned = T.filter(t => !t.curator && !live(t));
+  const wave1 = T.filter(t => !live(t) && t.risk_tier > 1);
+  const openT1 = D.controls.filter(c => c.status === 'Open' && T.find(t => t.topic_id === c.topic_id).risk_tier === 1).length;
+  kpis('ov-kpis', [
+    {label: 'Weekly active users', value: pct(active, hc) + '%', note: `${fmt(active)} of ${fmt(hc)} employees`},
+    {label: 'Resolved by assistant', value: pct(res, q) + '%', note: 'of questions this week', tone: 'ok'},
+    {label: 'Topics live', value: `${liveT.length}/${T.length}`, note: `${pct(liveT.length, T.length)}% of the knowledge base`},
+    {label: 'Support demand covered', value: covered + '%', note: 'of ticket volume has a live topic'},
+    {label: 'Support hours recovered', value: fmt(liveT.reduce((s, t) => s + hours(t), 0)), note: 'per quarter'},
+    {label: 'Tier 1 topics live', value: `${tier1.filter(live).length}/${tier1.length}`, note: `${fmt(tier1.reduce((s, t) => s + t.tickets_90d, 0))} tickets/qtr waiting`, tone: 'alert'},
+  ]);
+  const lag = L.filter(r => ['Finance', 'People', 'Legal'].includes(r.department));
+  const lead = L.filter(r => ['Business Technology', 'Security'].includes(r.department));
+  const rate = rows => pct(rows.reduce((s, r) => s + r.active_users, 0), rows.reduce((s, r) => s + r.headcount, 0));
+  $('ov-decisions').innerHTML = [
+    {tag: 'Ownership', h: 'Assign a curator to every high-demand topic',
+     p: `None of the topics without a curator are live. ${unowned.length} unowned topics hold ${fmt(unowned.reduce((s, t) => s + hours(t), 0))} support hours a quarter.`,
+     a: 'Name a curator per topic in each department before adding new content.'},
+    {tag: 'Sequencing', h: 'Ship Tier 2 and 3 content for Finance, Legal and Sales Ops next',
+     p: `${wave1.length} lower-risk topics are ready to build and would recover ${fmt(wave1.reduce((s, t) => s + hours(t), 0))} hours a quarter, led by contract intake and expense reports.`,
+     a: 'Run Wave 1 over the next quarter; review value monthly.'},
+    {tag: 'Risk', h: 'Open a dedicated review lane for Tier 1 topics',
+     p: `All ${tier1.length} compliance and personal-data topics are blocked, with ${openT1} governance controls still open (PII review, legal approval, escalation paths).`,
+     a: 'Standing weekly review with Legal and People; no Tier 1 topic goes live without all controls.'},
+    {tag: 'Adoption', h: 'Launch to each team when its content goes live',
+     p: `Teams with live content run at ${rate(lead)}% weekly active; Finance, People and Legal sit at ${rate(lag)}%. Usage follows content, not announcements.`,
+     a: 'Pair each department launch with its Wave 1 content and a short demo.'},
+  ].map(d => `<div class="decision"><div class="tag">${d.tag}</div><h3>${d.h}</h3><p>${d.p}</p><div class="act"><strong>Action:</strong> ${d.a}</div></div>`).join('');
+
+  chart('ov-adoption', {type: 'line', data: {labels: WEEKS.map(weekLabel), datasets: DEPTS.map((dp, i) => ({
+    label: dp, borderColor: DEPT_COLORS[i], backgroundColor: DEPT_COLORS[i], tension: .3, pointRadius: 0, borderWidth: 2,
+    data: WEEKS.map(w => { const r = D.adoption.find(x => x.week_start === w && x.department === dp); return Math.round(r.active_users / r.headcount * 100); })}))},
+    options: {plugins: {legend: {position: 'bottom'}, tooltip: {callbacks: {label: c => `${c.dataset.label}: ${c.raw}%`}}},
+      scales: {y: {min: 0, max: 100, ticks: {callback: v => v + '%'}}, x: {ticks: {maxTicksLimit: 8}, grid: {display: false}}}}});
+  chart('ov-value', {type: 'bar', data: {labels: DEPTS, datasets: [
+    {label: 'Recovered (live)', backgroundColor: C.ok, data: DEPTS.map(dp => Math.round(T.filter(t => t.department === dp && live(t)).reduce((s, t) => s + hours(t), 0)))},
+    {label: 'Available (backlog)', backgroundColor: C.calm, data: DEPTS.map(dp => Math.round(T.filter(t => t.department === dp && !live(t)).reduce((s, t) => s + hours(t), 0)))},
+  ]}, options: {indexAxis: 'y', scales: {x: {stacked: true, beginAtZero: true, title: {display: true, text: 'Hours per quarter'}}, y: {stacked: true, grid: {display: false}}}}});
+}
+
+/* ---------------- adoption ---------------- */
+function renderAdoption() {
+  const dp = $('ad-dept').value;
+  const rows = D.adoption.filter(r => !dp || r.department === dp);
+  const byWeek = WEEKS.map(w => rows.filter(r => r.week_start === w).reduce((a, r) => ({
+    active: a.active + r.active_users, hc: a.hc + r.headcount, q: a.q + r.queries, res: a.res + r.resolved_by_assistant, esc: a.esc + r.escalated_to_ticket,
+    hv: a.hv + r.helpful_votes, tv: a.tv + r.total_votes}), {active: 0, hc: 0, q: 0, res: 0, esc: 0, hv: 0, tv: 0}));
+  const last = byWeek[byWeek.length - 1], first4 = byWeek.slice(0, 4);
+  const allHv = byWeek.reduce((s, w) => s + w.hv, 0), allTv = byWeek.reduce((s, w) => s + w.tv, 0);
+  kpis('ad-kpis', [
+    {label: 'Weekly active users', value: fmt(last.active), note: `${pct(last.active, last.hc)}% of ${fmt(last.hc)} employees`},
+    {label: 'Questions this week', value: fmt(last.q), note: `${(last.q / Math.max(1, last.active)).toFixed(1)} per active user`},
+    {label: 'Resolution rate', value: pct(last.res, last.q) + '%', note: 'answered without a ticket', tone: 'ok'},
+    {label: 'Tickets avoided', value: fmt(byWeek.reduce((s, w) => s + w.res, 0)), note: 'since launch'},
+    {label: 'Rated helpful', value: pct(allHv, allTv) + '%', note: 'of rated answers'},
+  ]);
+  chart('ad-active', {type: 'line', data: {labels: WEEKS.map(weekLabel), datasets: [{label: 'Active rate', data: byWeek.map(w => pct(w.active, w.hc)),
+    borderColor: C.accent, backgroundColor: 'rgba(67,56,202,.08)', fill: true, tension: .3, pointRadius: 0, borderWidth: 2}]},
+    options: {plugins: {legend: {display: false}, tooltip: {callbacks: {label: c => c.raw + '% active'}}}, scales: {y: {min: 0, max: 100, ticks: {callback: v => v + '%'}}, x: {ticks: {maxTicksLimit: 8}, grid: {display: false}}}}});
+  chart('ad-queries', {type: 'bar', data: {labels: WEEKS.map(weekLabel), datasets: [
+    {label: 'Resolved by assistant', backgroundColor: C.ok, data: byWeek.map(w => w.res)},
+    {label: 'Escalated to ticket', backgroundColor: C.calm, data: byWeek.map(w => w.esc)},
+  ]}, options: {scales: {x: {stacked: true, ticks: {maxTicksLimit: 8}, grid: {display: false}}, y: {stacked: true, beginAtZero: true}}}});
+  const L = latestWeek();
+  $('ad-rows').innerHTML = L.slice().sort((a, b) => b.active_users / b.headcount - a.active_users / a.headcount).map(r => {
+    const T = D.topics.filter(t => t.department === r.department);
+    return `<tr><td class="strong">${esc(r.department)}</td><td class="num">${fmt(r.headcount)}</td><td class="num">${fmt(r.active_users)}</td>
+      <td class="num">${pct(r.active_users, r.headcount)}%</td><td class="num">${pct(r.resolved_by_assistant, r.queries)}%</td>
+      <td class="num">${T.filter(live).length} of ${T.length}</td></tr>`;
+  }).join('');
+}
+$('ad-dept').addEventListener('input', renderAdoption);
+
+/* ---------------- enablement & governance ---------------- */
+let gvDept = '', gvTier = '';
+function gvFiltered() {
+  const dp = $('gv-f-dept').value, tier = $('gv-f-tier').value, st = $('gv-f-status').value, s = $('gv-search').value.toLowerCase();
+  return D.topics.filter(t => (!dp || t.department === dp) && (!tier || String(t.risk_tier) === tier) && (!st || t.status === st)
+    && (!s || `${t.topic} ${t.curator} ${t.category}`.toLowerCase().includes(s)));
+}
+function setDept(d) { gvDept = d; $('gv-f-dept').value = d; renderGov(); }
+function setTier(t) { gvTier = t; $('gv-f-tier').value = t; renderGov(); }
+function renderGov() {
+  const T = D.topics;
+  const tier1 = T.filter(t => t.risk_tier === 1);
+  const openCtl = D.controls.filter(c => c.status === 'Open').length;
+  kpis('gv-kpis', [
+    {label: 'Enablement rate', value: pct(T.filter(live).length, T.length) + '%', note: `${T.filter(live).length} of ${T.length} topics live`},
+    {label: 'High-risk gaps', value: tier1.filter(t => !live(t)).length, note: `of ${tier1.length} Tier 1 topics not yet live`, tone: 'alert'},
+    {label: 'Curator ownership', value: pct(T.filter(t => t.curator).length, T.length) + '%', note: `${T.filter(t => !t.curator).length} topics unowned`, tone: 'warn'},
+    {label: 'Open controls', value: openCtl, note: 'governance checks outstanding'},
+    {label: 'Ticket evidence', value: D.evidence.length, note: 'example tickets indexed'},
+  ]);
+  chart('gv-status', {type: 'doughnut', data: {labels: STATUS, datasets: [{data: STATUS.map(s => T.filter(t => t.status === s).length), backgroundColor: STATUS.map(s => STATUS_COLOR[s]), borderWidth: 2}]},
+    options: {cutout: '62%', plugins: {legend: {position: 'right'}}}});
+  chart('gv-tiers', {type: 'doughnut', data: {labels: [1, 2, 3].map(k => TIER_SHORT[k]), datasets: [{data: [1, 2, 3].map(k => T.filter(t => t.risk_tier === k).length), backgroundColor: [1, 2, 3].map(k => TIER_COLOR[k]), borderWidth: 2}]},
+    options: {cutout: '62%', plugins: {legend: {position: 'right'}}, onClick: (e, els) => els.length && setTier(String(els[0].index + 1))}});
+  chart('gv-dept', {type: 'bar', data: {labels: DEPTS.map(d => d.replace('Business Technology', 'Bus. Technology').replace('Sales Operations', 'Sales Ops')), datasets: STATUS.map(s => ({
+    label: s, backgroundColor: STATUS_COLOR[s], data: DEPTS.map(d => T.filter(t => t.department === d && t.status === s).length)}))},
+    options: {plugins: {legend: {display: false}}, scales: {x: {stacked: true, grid: {display: false}, ticks: {font: {size: 10}}}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0}}},
+      onClick: (e, els) => els.length && setDept(DEPTS[els[0].index])}});
+  // department rollout rows
+  $('gv-depts').innerHTML = DEPTS.map(d => {
+    const dt = T.filter(t => t.department === d);
+    const owners = uniq(dt.map(t => t.curator).filter(Boolean));
+    const seg = STATUS.map(s => `<span style="width:${dt.filter(t => t.status === s).length / dt.length * 100}%;background:${STATUS_COLOR[s]}"></span>`).join('');
+    return `<button class="row" aria-pressed="${gvDept === d}" data-d="${esc(d)}"><div class="top"><span class="strong">${esc(d)}</span><span class="strong">${pct(dt.filter(live).length, dt.length)}% live</span></div>
+      <div class="stack">${seg}</div><div class="meta">${STATUS.map(s => `${dt.filter(t => t.status === s).length} ${s.toLowerCase()}`).join(' · ')} · Curators: ${owners.length ? owners.join(', ') : 'none assigned'}</div></button>`;
+  }).join('');
+  $('gv-depts').querySelectorAll('.row').forEach(b => b.onclick = () => setDept(gvDept === b.dataset.d ? '' : b.dataset.d));
+  $('gv-clear-dept').hidden = !gvDept;
+  // tier rows
+  $('gv-tierrows').innerHTML = [1, 2, 3].map(k => {
+    const tt = T.filter(t => t.risk_tier === k);
+    const ids = new Set(tt.map(t => t.topic_id));
+    const open = D.controls.filter(c => ids.has(c.topic_id) && c.status === 'Open').length;
+    const inRev = tt.filter(t => t.status === 'In review').length;
+    const seg = STATUS.map(s => `<span style="width:${tt.filter(t => t.status === s).length / tt.length * 100}%;background:${STATUS_COLOR[s]}"></span>`).join('');
+    return `<button class="row" aria-pressed="${gvTier === String(k)}" data-t="${k}"><div class="top"><span class="strong">${TIER[k]}</span><span class="strong">${tt.filter(live).length} of ${tt.length} live</span></div>
+      <div class="stack">${seg}</div><div class="meta">${open} open controls · ${inRev} in review · ${fmt(tt.reduce((s, t) => s + t.tickets_90d, 0))} tickets per quarter</div></button>`;
+  }).join('');
+  $('gv-tierrows').querySelectorAll('.row').forEach(b => b.onclick = () => setTier(gvTier === b.dataset.t ? '' : b.dataset.t));
+  $('gv-clear-tier').hidden = !gvTier;
+  // table
+  const rows = gvFiltered().slice().sort((a, b) => (a.status === 'Live') - (b.status === 'Live') || hours(b) - hours(a));
+  $('gv-count').textContent = `${rows.length} of ${T.length} topics · not-yet-live first, ranked by hours recoverable`;
+  $('gv-rows').innerHTML = rows.length ? rows.map(t => `<tr>
+    <td><div class="strong">${esc(t.topic)}</div><div class="sub">${esc(t.department)} · ${esc(t.category)}</div></td>
+    <td><span class="pill ${TIER_PILL[t.risk_tier]}">${TIER_SHORT[t.risk_tier]}</span></td>
+    <td>${t.curator ? esc(t.curator) : '<span class="sub">Unassigned</span>'}</td>
+    <td><span class="pill ${STATUS_PILL[t.status]}">${t.status}</span></td>
+    <td class="num">${t.controls_complete} of ${t.controls_required}</td>
+    <td class="num">${fmt(t.tickets_90d)}</td>
+    <td class="num">${hours(t).toFixed(0)}</td></tr>`).join('') : '<tr><td colspan="7" class="empty">No topics match these filters.</td></tr>';
+}
+$('gv-clear-dept').onclick = () => setDept('');
+$('gv-clear-tier').onclick = () => setTier('');
+['gv-f-dept', 'gv-f-tier', 'gv-f-status', 'gv-search'].forEach(id => $(id).addEventListener('input', () => { gvDept = $('gv-f-dept').value; gvTier = $('gv-f-tier').value; renderGov(); }));
+
+/* ---------------- ticket evidence ---------------- */
+function renderEvidence() {
+  const dp = $('ev-dept').value, s = $('ev-search').value.toLowerCase();
+  const rows = D.evidence.map(e => ({...e, t: D.topics.find(t => t.topic_id === e.topic_id)}))
+    .filter(e => (!dp || e.department === dp) && (!s || `${e.ticket_excerpt} ${e.t.topic}`.toLowerCase().includes(s)));
+  $('ev-count').textContent = `${rows.length} example tickets · each one points to a knowledge-base topic the assistant needs`;
+  $('ev-rows').innerHTML = rows.length ? rows.map(e => `<tr><td><div class="strong">${esc(e.t.topic)}</div><div class="sub">${TIER_SHORT[e.t.risk_tier]}</div></td>
+    <td>${esc(e.department)}</td><td><span class="pill ${STATUS_PILL[e.t.status]}">${e.t.status}</span></td>
+    <td class="wrap-cell">“${esc(e.ticket_excerpt)}”</td></tr>`).join('') : '<tr><td colspan="4" class="empty">No tickets match.</td></tr>';
+}
+['ev-dept', 'ev-search'].forEach(id => $(id).addEventListener('input', renderEvidence));
+
+/* ---------------- add topic (demo form) ---------------- */
+$('gv-add').onclick = () => {
+  $('dlg-form').innerHTML = `<h2>Add topic</h2><p class="form-note">Demo form: entries are not saved.</p>
+    <label class="full">Topic<input name="topic" required></label>
+    <label>Department<select name="department">${DEPTS.map(d => `<option>${esc(d)}</option>`).join('')}</select></label>
+    <label>Risk tier<select name="risk_tier"><option value="3">Tier 3 · General</option><option value="2">Tier 2 · Operational</option><option value="1">Tier 1 · Compliance & PII</option></select></label>
+    <label>Status<select name="status">${STATUS.slice().reverse().map(s => `<option>${s}</option>`).join('')}</select></label>
+    <label>Curator<input name="curator" placeholder="Unassigned"></label>
+    <label class="full">Example ticket<textarea name="example" rows="3" placeholder="What employees are asking"></textarea></label>
+    <div class="actions"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn" value="save">Add topic</button></div>`;
+  $('dlg').returnValue = '';
+  $('dlg').showModal();
+  $('dlg').onclose = () => {
+    if ($('dlg').returnValue !== 'save') return;
+    const v = Object.fromEntries(new FormData($('dlg-form')));
+    const tier = Number(v.risk_tier), req = {1: 4, 2: 3, 3: 1}[tier];
+    const id = 'KB-' + String(D.topics.length + 1).padStart(3, '0');
+    D.topics.push({topic_id: id, department: v.department, category: 'New', topic: v.topic, risk_tier: tier, curator: v.curator.trim(), status: v.status,
+      live_since: '', tickets_90d: 0, avg_handle_min: 0, deflection_rate: {1: .15, 2: .3, 3: .45}[tier], controls_required: req, controls_complete: v.status === 'Live' ? req : 0});
+    if (v.example.trim()) D.evidence.push({topic_id: id, department: v.department, ticket_excerpt: v.example.trim()});
+    toast(`Added ${v.topic}`); renderGov();
+  };
+};
+
+/* ---------------- boot ---------------- */
+fetch('data.json').then(r => r.json()).then(data => {
+  D = data; AS_OF = data.as_of;
+  D.topics.forEach(t => { t.risk_tier = Number(t.risk_tier); });
+  DEPTS = Object.keys(D.adoption.reduce((m, r) => (m[r.department] = 1, m), {}));
+  WEEKS = uniq(D.adoption.map(r => r.week_start));
+  $('asof').textContent = new Date(AS_OF + 'T12:00').toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+  options('ad-dept', DEPTS, 'All departments');
+  options('gv-f-dept', DEPTS, 'All');
+  options('ev-dept', DEPTS, 'All departments');
+  renderOverview();
+}).catch(() => { document.querySelector('.wrap').insertAdjacentHTML('beforeend', '<p class="card">The demo data could not be loaded. Open this page through GitHub Pages or a local web server.</p>'); });
+</script>
+</body>
+</html>
